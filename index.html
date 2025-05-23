@@ -202,12 +202,21 @@
 
   <section id="comentarios">
     <h2>💬 Comentarios</h2>
-    <form id="comentarioForm">
-        <input type="text" id="nombre" placeholder="Tu nombre" required>
-        <textarea id="textoComentario" placeholder="Escribe tu comentario..." required></textarea>
-        <button type="submit">Publicar comentario</button>
-    </form>
-    <div id="listaComentarios"></div>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = window.location.href;
+        this.page.identifier = window.location.pathname;
+      };
+  
+      (function () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://GoW-disqus.disqus.com/embed.js'; 
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Por favor activa JavaScript para ver los <a href="https://disqus.com/?ref_noscript">comentarios de Disqus.</a></noscript>
   </section>
 
   <section class="disclaimer">
@@ -217,47 +226,5 @@
       La URJC no se hace responsable del contenido expuesto por el autor.
     </p>
   </section>
-
-    <script>
-    
-        const comentarioForm = document.getElementById('comentarioForm');
-        const listaComentarios = document.getElementById('listaComentarios');
-
-        // Cargar comentarios desde localStorage
-        document.addEventListener('DOMContentLoaded', () => {
-            const comentariosGuardados = JSON.parse(localStorage.getItem('comentarios')) || [];
-            comentariosGuardados.forEach(agregarComentarioAlDOM);
-        });
-
-        comentarioForm.addEventListener('submit', e => {
-            e.preventDefault();
-            const nombre = document.getElementById('nombre').value.trim();
-            const texto = document.getElementById('textoComentario').value.trim();
-            if (!nombre || !texto) return;
-
-            const nuevoComentario = { nombre, texto };
-            agregarComentarioAlDOM(nuevoComentario);
-
-            // Guardar en localStorage
-            const comentarios = JSON.parse(localStorage.getItem('comentarios')) || [];
-            comentarios.push(nuevoComentario);
-            localStorage.setItem('comentarios', JSON.stringify(comentarios));
-
-            // Limpiar formulario
-            comentarioForm.reset();
-        });
-
-        function agregarComentarioAlDOM({ nombre, texto }) {
-            const div = document.createElement('div');
-            div.classList.add('comentario');
-            div.innerHTML = `
-                <strong>${nombre}</strong>
-                <p>${texto}</p>
-                <hr>
-            `;
-            listaComentarios.prepend(div);
-        }
-    </script>
-
 </body>
 </html>
